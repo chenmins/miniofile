@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Title</title>
+		<script src="jquery-1.10.2.js"></script>
+	</head>
+	<body>
+	bucket：<input type="text" id="bucket" value="aaa" >
+	<br />
+		<input type="file" id="selector" multiple>
+		<button onclick="upload('selector','status')">Upload</button>
+		<hr />
+		<textarea id="status" style="width: 100%;height: 100px;">
+
+		</textarea>
+
+		<script type="text/javascript">
+			function upload(selector, status) {
+				[$('#' + selector)[0].files].forEach(fileObj => {
+					console.log(fileObj.length);
+					var statusValue = "";
+					for (var i = 0; i < fileObj.length; i++) {
+						var file = fileObj[i];
+						statusValue += retrieveNewURL(file)+"\n";
+					}
+					console.log(statusValue);
+					$('#' + status).text(statusValue);
+				})
+			}
+
+			function retrieveNewURL(file) {
+				var resultString = '';
+				var bucket = $("#bucket").val();
+				$.ajax({
+					method: "get",
+					async: false,
+					url: `/api/minio/presignedUrl?bucket=${bucket}&name=${file.name}`,//${file.name}为源文件名，如果需要修改可自定义后拼接
+					processData: false,
+					contentType: false,
+					success: function(result) {
+						var resultBooleam = uploadFile(file, result);
+						if (resultBooleam) {
+							resultString = result.substr(0, result.indexOf("?"));
+						}
+					}
+				});
+				console.log(resultString);
+				return resultString;
+			}
+
+			function uploadFile(file, url) {
+				var resultBooleam = false;
+				$.ajax({
+					method: "put",
+					async: false,
+					url: url,
+					data: file,
+					processData: false,
+					contentType: false,
+					success: function(result) {
+						resultBooleam = true;
+					}
+				});
+				return resultBooleam;
+			}
+		</script>
+
+	</body>
+</html>
