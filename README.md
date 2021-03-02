@@ -2,10 +2,10 @@
 ## 1. Run The App
 
 The full code is available here :
-  [http://git.yangjiandongxiaoshuo.com/dashuowang/miniofile](http://git.yangjiandongxiaoshuo.com/dashuowang/miniofile).  Do the following steps to start the app server.
+  [http://github.com/chenmins/miniofile](http://github.com/chenmins/miniofile).  Do the following steps to start the app server.
 
   ```sh
-  git clone http://git.yangjiandongxiaoshuo.com/dashuowang/miniofile
+  git clone http://github.com/chenmins/miniofile
   cd miniofile
   npm install
   node index.js
